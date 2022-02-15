@@ -45,7 +45,9 @@ class RunException implements Bootstrap
     public static function start($worker)
     {
         if ($worker) {
-            static::$_workerPid  = @posix_getpid();
+            if (\DIRECTORY_SEPARATOR !== '\\') {
+                static::$_workerPid = @posix_getpid();
+            }
             static::$_workerName = $worker->name;
 
             if (!config('plugin.hsk99.exception.app.notice', false)) {
