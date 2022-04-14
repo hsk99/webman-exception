@@ -108,7 +108,7 @@ class RunException implements Bootstrap
                     static::$_mail = '';
                 }
             } catch (\Throwable $th) {
-                Log::error((string)$th);
+                Log::error($th->getMessage(), ['exception' => (string)$th]);
             }
         }
     }
@@ -171,7 +171,7 @@ class RunException implements Bootstrap
 
             return $mail->send() ? true : $mail->ErrorInfo;
         } catch (\Throwable $th) {
-            Log::error((string)$th);
+            Log::error($th->getMessage(), ['exception' => (string)$th]);
             return $th->getMessage();
         }
     }
