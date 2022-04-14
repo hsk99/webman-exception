@@ -6,6 +6,4 @@ return [
     'smtp_pass'   => '',
     'smtp_secure' => '',
     'smtp_port'   => '',
-    'from_email'  => '',
-    'from_name'   => '',
 ];

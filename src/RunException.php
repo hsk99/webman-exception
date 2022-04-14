@@ -108,6 +108,7 @@ class RunException implements Bootstrap
                     static::$_mail = '';
                 }
             } catch (\Throwable $th) {
+                Log::error((string)$th);
             }
         }
     }
@@ -130,6 +131,16 @@ class RunException implements Bootstrap
         try {
             $config = config('plugin.hsk99.exception.email');
 
+            if (
+                empty($config['smtp_host']) ||
+                empty($config['smtp_user']) ||
+                empty($config['smtp_pass']) ||
+                empty($config['smtp_secure']) ||
+                empty($config['smtp_port'])
+            ) {
+                throw new \Exception('未配置邮箱参数', 500);
+            }
+
             if (!Container::has(PHPMailer::class)) {
                 Container::make(PHPMailer::class, []);
             }
@@ -144,8 +155,6 @@ class RunException implements Bootstrap
             $mail->Password   = $config['smtp_pass'];
             $mail->SMTPSecure = $config['smtp_secure'];
             $mail->Port       = $config['smtp_port'];
-
-            $mail->setFrom($config['from_email'], $config['from_name']);
 
             if (is_array($toMail)) {
                 foreach ($toMail as $email) {
@@ -162,6 +171,7 @@ class RunException implements Bootstrap
 
             return $mail->send() ? true : $mail->ErrorInfo;
         } catch (\Throwable $th) {
+            Log::error((string)$th);
             return $th->getMessage();
         }
     }
