@@ -124,9 +124,9 @@ class RunException implements Bootstrap
      * @param string $body
      * @param boolean $isHTML
      *
-     * @return bool|string
+     * @return bool
      */
-    protected static function sendEmail($toMail, $subject = '', $body = '', $isHTML = true)
+    protected static function sendEmail($toMail, $subject = '', $body = '', $isHTML = true): bool
     {
         try {
             $config = config('plugin.hsk99.exception.email');
@@ -169,7 +169,12 @@ class RunException implements Bootstrap
             $mail->Body    = $body;
             $mail->AltBody = $body;
 
-            return $mail->send() ? true : $mail->ErrorInfo;
+            if ($mail->send()) {
+                return true;
+            } else {
+                Log::error($mail->ErrorInfo);
+                return false;
+            }
         } catch (\Throwable $th) {
             Log::error($th->getMessage(), ['exception' => (string)$th]);
             return $th->getMessage();
