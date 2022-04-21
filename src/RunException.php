@@ -88,6 +88,11 @@ class RunException implements Bootstrap
             'exception' => (string)$exception,
         ]);
 
+        if (config('plugin.hsk99.exception.app.debug', false)) {
+            echo "\033[31;1m" . "[" . date('Y-m-d H:i:s') . "]\tWorker：" . static::$_workerName  . PHP_EOL . "\033[0m";
+            echo $exception . PHP_EOL . PHP_EOL;
+        }
+
         // 缓存邮件内容
         if (config('plugin.hsk99.exception.app.notice', false)) {
             try {
