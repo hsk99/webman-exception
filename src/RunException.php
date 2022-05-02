@@ -149,6 +149,9 @@ class RunException implements Bootstrap
             if (!Container::has(PHPMailer::class)) {
                 Container::make(PHPMailer::class, []);
             }
+            /**
+             * @var PHPMailer
+             */
             $mail = Container::get(PHPMailer::class);
 
             $mail->CharSet    = "UTF-8";
@@ -160,6 +163,7 @@ class RunException implements Bootstrap
             $mail->Password   = $config['smtp_pass'];
             $mail->SMTPSecure = $config['smtp_secure'];
             $mail->Port       = $config['smtp_port'];
+            $mail->From       = $config['smtp_user'];
 
             if (is_array($toMail)) {
                 foreach ($toMail as $email) {
