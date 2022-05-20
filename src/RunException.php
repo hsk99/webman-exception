@@ -6,7 +6,6 @@ use Webman\Bootstrap;
 use Workerman\Timer;
 use Throwable;
 use support\Log;
-use support\Container;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class RunException implements Bootstrap
@@ -146,13 +145,7 @@ class RunException implements Bootstrap
                 throw new \Exception('未配置邮箱参数', 500);
             }
 
-            if (!Container::has(PHPMailer::class)) {
-                Container::make(PHPMailer::class, []);
-            }
-            /**
-             * @var PHPMailer
-             */
-            $mail = Container::get(PHPMailer::class);
+            $mail = new PHPMailer();
 
             $mail->CharSet    = "UTF-8";
             $mail->SMTPDebug  = 0;
