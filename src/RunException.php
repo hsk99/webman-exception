@@ -73,11 +73,11 @@ class RunException implements Bootstrap
      * @author HSK
      * @date 2022-01-16 22:31:24
      *
-     * @param Throwable $exception
+     * @param \Throwable|\Exception|\Error $exception
      *
      * @return void
      */
-    public static function report(Throwable $exception)
+    public static function report($exception)
     {
         $project = config('plugin.hsk99.exception.app.project', '');
 
@@ -114,6 +114,11 @@ class RunException implements Bootstrap
             } catch (\Throwable $th) {
                 Log::error($th->getMessage(), ['exception' => (string)$th]);
             }
+        }
+
+        // 异常上报
+        if (class_exists(\Hsk99\WebmanStatistic\Statistic::class)) {
+            \Hsk99\WebmanStatistic\Statistic::exception($exception);
         }
     }
 
